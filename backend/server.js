@@ -8,6 +8,7 @@ import cors from "cors"
 import dotenv from 'dotenv'
 
 import postRoutes from './routes/posts.js'
+import userRoutes from './routes/user.js'
 // const postRoutes = require('./routes/posts')
 
 const app = express()
@@ -29,6 +30,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 app.use('/posts', postRoutes)
+app.use('/user', userRoutes)
 
 
 

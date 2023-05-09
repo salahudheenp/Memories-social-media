@@ -1,6 +1,6 @@
 
-import { FETCH_ALL, FETCH_ERROR, CREATE, CREATE_ERROR, UPDATE_ERROR, UPDATE_POST, DELETE_POST, LIKE_POST } from '../actions/types'
-
+// import { FETCH_ALL, FETCH_ERROR, CREATE, CREATE_ERROR, UPDATE_ERROR, UPDATE_POST, DELETE_POST, LIKE_POST } from '../actions/types'
+import { CREATE, FETCH_ALL, LIKE, DELETE, UPDATE } from '../actions/types'
 
 // const initialState = {
 //     posts: [],
@@ -14,11 +14,11 @@ export default (state = [], action) => {
 
         case CREATE:
             return [...state, action.payload]
-        case UPDATE_POST:
+        case UPDATE:
             return state.map((state) => state._id === action.payload._id ? action.payload : state)
-        case DELETE_POST:
+        case DELETE:
             return state.filter((post) => post._id !== action.payload)
-        case LIKE_POST:
+        case LIKE:
             return state.map((state) => state._id === action.payload._id ? action.payload : state)
 
 

@@ -9,12 +9,13 @@ import { createPost, updatePost } from '../../redux/actions/postsActions'
 
 
 const Form = ({ currentId, setCurrentId }) => {
-    const [postData, setPostData] = useState({ creator: "", title: "", message: "", tags: "", selectedFile: "" })
+    const [postData, setPostData] = useState({ title: "", message: "", tags: "", selectedFile: "" })
     const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null)
 
     const dispatch = useDispatch()
 
     const classes = useStyles()
+    const user = JSON.parse(localStorage.getItem('profile'))
 
     useEffect(() => {
         if (post) setPostData(post)
@@ -23,22 +24,33 @@ const Form = ({ currentId, setCurrentId }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(postData, 'postDataaaa');
 
         if (currentId) {
-            dispatch(updatePost(currentId, postData))
-
+            dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }))
+            clear()
         } else {
-            dispatch(createPost(postData))
-
+            dispatch(createPost({ ...postData, name: user?.result?.name }))
+            clear()
         }
         clear()
 
     }
 
+    if (!user) {
+        return (
+            <Paper className={classes.paper} >
+                <Typography variant='h6' align='center'>
+                    please Sign in to Create your own memories
+                </Typography>
+            </Paper>
+        )
+    }
+
+
+
     const clear = () => {
         setCurrentId(0)
-        setPostData({ creator: "", title: "", message: "", tags: "", selectedFile: "" })
+        setPostData({ title: "", message: "", tags: "", selectedFile: "" })
     }
 
 
@@ -46,7 +58,7 @@ const Form = ({ currentId, setCurrentId }) => {
         <Paper className={classes.paper}>
             <form autoComplete='off' noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <Typography variant='h6'>{currentId ? 'Editing' : 'Creating'}  a Memory</Typography>
-                <TextField name='creator' variant='outlined' label='creator' fullWidth value={postData.creator} onChange={(e) => setPostData({ ...postData, creator: e.target.value })} />
+
                 <TextField name='title' variant='outlined' label='title' fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
                 <TextField name='message' variant='outlined' label='message' fullWidth value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
                 <TextField name='tags' variant='outlined' label='tags' fullWidth value={postData.tags} onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(',') })} />
